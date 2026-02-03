@@ -93,6 +93,7 @@ export async function getBatch(page: number = 1): Promise<BatchResponse> {
 - Episode list with search functionality
 - "Watch Latest Episode" button
 - All content visible on both mobile and desktop
+- **Episode numbers**: Extract from slug if API doesn't provide (e.g., "episode-12" → "12")
 
 ### 3. Watch/Player Page
 - Video player with iframe embed
@@ -174,7 +175,19 @@ export function isEpisodeSlug(slug: string): boolean {
 }
 ```
 
-### 4. Responsive Layout
+### 4. Episode Number Extraction
+Extract episode number from slug as fallback:
+```typescript
+function extractEpisodeNumber(slug: string): string {
+    const match = slug.match(/episode-(\d+)/i);
+    return match ? match[1] : '?';
+}
+
+// Usage in episode list
+<span>Episode {ep.episode || extractEpisodeNumber(ep.slug)}</span>
+```
+
+### 5. Responsive Layout
 - Mobile: < 768px
 - Tablet: 768px - 1024px
 - Desktop: > 1024px
@@ -253,17 +266,18 @@ npm run dev
 3. **Smart Routing**: Hero slider must detect episode vs anime slugs
 4. **Mobile Layout**: Detail page must use horizontal card on mobile
 5. **Schedule Sorting**: Must start from current day with "Today" badge
-6. **Episode List**: Must include search functionality
-7. **Responsive Design**: Test on mobile, tablet, and desktop
-8. **Loading States**: Show skeletons while data is loading
-9. **SEO**: Hardcoded in layout.tsx, dynamic per page using generateMetadata()
-10. **Vercel Deployment**: No database needed, fully serverless
+6. **Episode Numbers**: Always extract from slug as fallback if API doesn't provide
+7. **Episode List**: Must include search functionality
+8. **Responsive Design**: Test on mobile, tablet, and desktop
+9. **Loading States**: Show skeletons while data is loading
+10. **SEO**: Hardcoded in layout.tsx, dynamic per page using generateMetadata()
 
 ## Testing Checklist
 
 - [ ] Homepage loads with hero slider and infinite scroll
 - [ ] Hero slider auto-plays and navigates correctly
 - [ ] Detail page shows correct layout on mobile and desktop
+- [ ] Episode buttons display episode numbers correctly
 - [ ] Watch page has navigation buttons centered below video
 - [ ] Schedule starts from current day
 - [ ] Batch page infinite scroll works without duplicates
@@ -272,23 +286,18 @@ npm run dev
 - [ ] robots.txt and sitemap.xml are accessible
 - [ ] All pages are responsive
 - [ ] No console errors
-- [ ] Deploys successfully to Vercel
 
 ## Success Criteria
 
 ✅ All pages render correctly
 ✅ Infinite scroll works on all applicable pages
+✅ Episode numbers display correctly (from API or extracted from slug)
 ✅ SEO is properly implemented
 ✅ Mobile responsive design works perfectly
 ✅ Navigation and routing work as expected
 ✅ No duplicate data in infinite scroll
 ✅ Analytics tracking is active
-✅ Successfully deploys to Vercel
 
 ---
 
 **Build this exactly as specified and you will have a production-ready anime streaming website!**
-
-## Live Demo
-- **Production**: https://animekompi.vercel.app
-- **GitHub**: https://github.com/yontrisnaa/animekompi
