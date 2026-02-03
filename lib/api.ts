@@ -7,7 +7,7 @@ import type {
     BatchResponse,
 } from './types';
 
-const BASE_URL = 'https://zeldvorik.ru/animekompi/endpoints';
+const BASE_URL = 'https://rgsordertracking.com/animekompi/endpoints';
 
 async function fetchAPI<T>(endpoint: string, params?: Record<string, string>): Promise<T> {
     const url = new URL(`${BASE_URL}${endpoint}`);
