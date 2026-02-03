@@ -17,6 +17,12 @@ interface EpisodeListProps {
     episodes: Episode[];
 }
 
+// Helper function to extract episode number from slug
+function extractEpisodeNumber(slug: string): string {
+    const match = slug.match(/episode-(\d+)/i);
+    return match ? match[1] : '?';
+}
+
 export function EpisodeList({ episodes }: EpisodeListProps) {
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -74,7 +80,9 @@ export function EpisodeList({ episodes }: EpisodeListProps) {
                         >
                             <Link href={`/watch/${ep.slug}`}>
                                 <span className="text-gray-400 text-xs text-left mb-1">{ep.date}</span>
-                                <span className="text-white font-bold">Episode {ep.episode}</span>
+                                <span className="text-white font-bold">
+                                    Episode {ep.episode || extractEpisodeNumber(ep.slug)}
+                                </span>
                             </Link>
                         </Button>
                     ))}
